@@ -2,8 +2,7 @@
 require 'xcodeproj'
 require './XCodeTarget'
 require './XCodeProject'
-project_name = 'Payments'
-$project_path = "../../paxios/pax-ios/src/Payments/#{project_name}.xcodeproj"
+
 
 def log_duplicates_imports(target)
   files_with_duplicate_imports = target.files_with_duplicate_imports
@@ -22,15 +21,18 @@ def files_with_duplicate_import(target)
   end
 end
 
-def load_xcode_project
-  project = XCodeProject.new($project_path)
+def load_xcode_project(project_path)
+  project = XCodeProject.new(project_path)
   puts "Duplicate imports info: \n\n"
   project.non_test_targets.each do |target|
     # log_duplicates_imports(target)
     files_with_duplicate_import(target)
   end
-  # Testing
-  # log_duplicates_imports(project.get_target_by_name('PaymentsCashout'))
 end
 
-load_xcode_project
+if ARGV.length == 1
+  load_xcode_project(ARGV[0])
+elsif
+puts "Enter the project path"
+end
+
