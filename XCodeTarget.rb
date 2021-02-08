@@ -39,4 +39,10 @@ class XCodeTarget
   def to_s
     "Target - #{@name}"
   end
+
+  # Returns the unused dependencies on the target
+  def unused_dependencies_list
+    imports = all_unique_imports.map { |import| import.split.last }
+    dependency_list - imports
+  end
 end
