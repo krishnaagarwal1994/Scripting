@@ -21,12 +21,28 @@ def files_with_duplicate_import(target)
   end
 end
 
+def target_dependencies(target)
+  puts "#{target.name} dependencies:- "
+  puts target.dependency_list
+  puts "\n"
+end
+
+def print_unused_dependencies_list(target)
+  unused_dependencies = target.unused_dependencies_list
+  unless unused_dependencies.empty?
+    title = "#{target.name} with unused dependencies:-"
+    puts title
+    puts '-' * title.length
+    puts unused_dependencies
+    puts "\n"
+  end
+end
+
 def load_xcode_project(project_path)
   project = XCodeProject.new(project_path)
   puts "Duplicate imports info: \n\n"
   project.non_test_targets.each do |target|
-    # log_duplicates_imports(target)
-    files_with_duplicate_import(target)
+    print_unused_dependencies_list(target)
   end
 end
 
