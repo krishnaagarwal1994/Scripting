@@ -40,14 +40,26 @@ end
 
 def load_xcode_project(project_path)
   project = XCodeProject.new(project_path)
-  puts "Duplicate imports info: \n\n"
   project.non_test_targets.each do |target|
-    print_unused_dependencies_list(target)
+    # print_unused_dependencies_list(target)
+    log_duplicates_imports(target)
   end
 end
 
+def delete_duplicate_imports(project_path)
+  project = XCodeProject.new(project_path)
+  project.non_test_targets.each { |target| target.files.each(&:remove_duplicate_imports) }
+
+  # Test code
+  # default_target = project.get_target_by_name("target_name")
+  # result_file = default_target.files.select{ |file| file.name == 'ToastNotificationsStackView.swift'}.first
+  # result_file.remove_duplicate_imports
+  # # default_target.files.each(&:remove_duplicate_imports)
+end
+
 if ARGV.length == 1
-  load_xcode_project(ARGV[0])
+  # load_xcode_project(ARGV[0])
+  delete_duplicate_imports(ARGV[0])
 elsif
 puts "Enter the project path"
 end

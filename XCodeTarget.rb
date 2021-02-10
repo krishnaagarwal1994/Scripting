@@ -27,12 +27,12 @@ class XCodeTarget
 
   # Returns [String] of all the unit imports statements in the target
   def all_unique_imports
-    files.map { |file| file.all_imports }.flatten.uniq
+    files.map(&:all_imports).flatten.uniq
   end
 
   # Returns names of files with duplicates imports.
   def files_with_duplicate_imports
-    files.select{ |file| file.has_duplicate_import? }
+    files.select(&:has_duplicate_import?)
   end
 
   # Returns the description of the object
