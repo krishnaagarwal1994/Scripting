@@ -2,7 +2,7 @@ require './XCodeTarget'
 
 # Represents and XCode project
 class XCodeProject
-  attr_reader :test_targets, :non_test_targets # [XCodeTargets]
+  attr_reader :all_targets, :test_targets, :non_test_targets # [XCodeTargets]
 
   def initialize(project_path)
     project = load_project_from_path(project_path)
