@@ -48,7 +48,7 @@ end
 
 def delete_duplicate_imports(project_path)
   project = XCodeProject.new(project_path)
-  project.all_targets.each { |target| target.files.each(&:remove_duplicate_imports) }
+  project.all_targets.each(&:remove_duplicate_imports)
 end
 
 if ARGV.length == 1

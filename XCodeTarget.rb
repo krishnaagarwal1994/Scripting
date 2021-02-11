@@ -45,4 +45,9 @@ class XCodeTarget
     imports = all_unique_imports.map { |import| import.split.last }
     dependency_list - imports
   end
+
+  # Removes all the duplicate import statements from all the files linked to the target
+  def remove_duplicate_imports
+    files.each(&:remove_duplicate_imports)
+  end
 end
