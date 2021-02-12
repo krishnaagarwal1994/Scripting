@@ -4,13 +4,14 @@ require './XCodeFile'
 class XCodeTarget
   attr_reader :name, :is_test_target
 
+  # Initializer that takes an XcodeTarget as an input
   def initialize(target)
     @target = target
     @name = target.display_name
     @is_test_target = target.test_target_type?
   end
 
-  # Returns [String]
+  # Returns an Array<String> of dependencies on the target
   def dependency_list
     @target.dependencies.map(&:display_name)
   end
@@ -44,6 +45,15 @@ class XCodeTarget
   def unused_dependencies_list
     imports = all_unique_imports.map { |import| import.split.last }
     dependency_list - imports
+  end
+
+  # Removed the unused target dependencies on the target.
+  def remove_unused_dependencies
+    # puts 'removing unused dependencies list.'
+    dependencies = @target.dependencies
+    dependencies.each do |dependency|
+      dependency.remove_from_project if unused_dependencies_list.include? dependency.display_name
+    end
   end
 
   # Removes all the duplicate import statements from all the files linked to the target

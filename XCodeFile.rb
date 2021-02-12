@@ -2,23 +2,29 @@
 class XCodeFile
   attr_reader :name, :path
 
+  # Initializer which takes build file as an argument
   def initialize(build_file)
     @name = build_file.file_ref.display_name
     @path = build_file.file_ref.real_path.to_s
   end
 
+  # Method to return all the imports including the @testable import present in the file
   def all_imports
-    File.foreach(@path).grep(/^import/).flatten
+    File.foreach(@path).grep(/^import|^@testable import/).flatten
   end
 
+  # Returns true is the file contains any duplicate import statement
   def has_duplicate_import?
     duplicate_imports_info.length > 0
   end
 
+  # Method to return the description of the object when printed.
   def to_s
     @name
   end
 
+  # Prints the info for the duplicate imports in the file
+  # format - {import_name} : {number_of_times_of_import}
   def print_duplicate_imports_info
     if has_duplicate_import?
       puts "#{@name}\n"
@@ -27,6 +33,7 @@ class XCodeFile
     end
   end
 
+  # Removes all the duplicate imports from the file
   def remove_duplicate_imports
     duplicate_imports_mapping = duplicate_imports_info
     duplicate_imports = duplicate_imports_mapping.keys
@@ -49,8 +56,8 @@ class XCodeFile
 
   private
 
+  # Returns the mapping of the duplicate import statements
   def duplicate_imports_info
-    # calculate the duplicate element frequency
     import_frequency_mapping = {}
     all_imports.uniq.each do |item|
       item_occurrence = all_imports.count(item)
