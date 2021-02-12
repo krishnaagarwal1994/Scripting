@@ -5,8 +5,10 @@ class XCodeProject
   attr_reader :all_targets, :test_targets, :non_test_targets # [XCodeTargets]
 
   def initialize(project_path)
-    project = load_project_from_path(project_path)
-    @all_targets = load_targets_from_project(project).map { |t| XCodeTarget.new(t)}
+    @project = load_project_from_path(project_path)
+    @all_targets = load_targets_from_project(@project)
+                     .select { |target| !target.display_name.include? "#{@project.root_object.name}Executable" }
+                     .map { |t| XCodeTarget.new(t)}
     @test_targets = filter_test_targets(@all_targets)
     @non_test_targets = @all_targets - @test_targets
   end
@@ -20,6 +22,10 @@ class XCodeProject
     end
   end
 
+  def save_project
+    @project.save
+  end
+
   private
 
   def load_project_from_path(project_path)
@@ -27,7 +33,7 @@ class XCodeProject
   end
 
   def load_targets_from_project(project)
-    project.native_targets
+    @project.native_targets
   end
 
   def filter_test_targets(targets)

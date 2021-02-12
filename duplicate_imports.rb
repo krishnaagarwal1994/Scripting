@@ -38,11 +38,17 @@ def print_unused_dependencies_list(target)
   end
 end
 
+def remove_unused_dependencies(project_path)
+  project = XCodeProject.new(project_path)
+  project.non_test_targets.each(&:remove_unused_dependencies)
+  project.save_project
+end
+
 def load_xcode_project(project_path)
   project = XCodeProject.new(project_path)
   project.non_test_targets.each do |target|
-    # print_unused_dependencies_list(target)
-    log_duplicates_imports(target)
+    print_unused_dependencies_list(target)
+    # log_duplicates_imports(target)
   end
 end
 
@@ -52,8 +58,7 @@ def delete_duplicate_imports(project_path)
 end
 
 if ARGV.length == 1
-  # load_xcode_project(ARGV[0])
-  delete_duplicate_imports(ARGV[0])
+  remove_unused_dependencies(ARGV[0])
 elsif
 puts "Enter the project path"
 end
