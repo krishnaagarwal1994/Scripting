@@ -1,4 +1,4 @@
-# Represents a normal swift file present in Xcode
+# Represents a normal swift file present in Xcode.
 class XCodeFile
   attr_reader :name, :path
 
